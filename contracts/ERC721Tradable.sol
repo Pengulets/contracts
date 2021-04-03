@@ -4,10 +4,8 @@ pragma solidity ^0.8.3;
 import "./utils/StringConcat.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract OwnableDelegateProxy {}
 
@@ -15,14 +13,12 @@ contract ProxyRegistry {
     mapping(address => OwnableDelegateProxy) public proxies;
 }
 
-contract ERC721Tradable is ERC721, Ownable {
+contract ERC721Tradable is ERC721 {
     using StringConcat for string;
     using Strings for string;
     using SafeMath for uint256;
-    using Counters for Counters.Counter;
 
     address proxyRegistryAddress;
-    Counters.Counter public tokenIds;
 
     constructor(
         string memory _name,
@@ -30,17 +26,6 @@ contract ERC721Tradable is ERC721, Ownable {
         address _proxyRegistryAddress
     ) ERC721(_name, _symbol) {
         proxyRegistryAddress = _proxyRegistryAddress;
-    }
-
-    /**
-     * @dev Mints a token to an address with a tokenURI.
-     * @param _to address of the future owner of the token
-     */
-    function mintTo(address _to) public onlyOwner {
-        tokenIds.increment();
-
-        uint256 newItemId = tokenIds.current();
-        _mint(_to, newItemId);
     }
 
     function baseTokenURI() public pure returns (string memory) {
