@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/Pengulets/contracts/issues"
   },
-  "homepage": "https://github.com/Pengulets/contracts#readme"
+  "homepage": "https://github.com/Pengulets/contracts#readme",
+  "devDependencies": {
+    "hardhat": "^2.1.2"
+  }
 }
