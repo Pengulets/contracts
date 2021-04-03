@@ -7,10 +7,16 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "hardhat compile"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.1.0",
+    "hardhat": "^2.1.2"
   },
   "repository": {
     "type": "git",
@@ -19,8 +25,5 @@
   "bugs": {
     "url": "https://github.com/Pengulets/contracts/issues"
   },
-  "homepage": "https://github.com/Pengulets/contracts#readme",
-  "devDependencies": {
-    "hardhat": "^2.1.2"
-  }
+  "homepage": "https://github.com/Pengulets/contracts#readme"
 }
