@@ -7,7 +7,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "compile": "hardhat compile"
+    "compile": "hardhat compile",
+    "flatten": "node ./scripts/flatten.js"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.0.2",
