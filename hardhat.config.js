@@ -1,6 +1,8 @@
 require('dotenv').config();
 require('@nomiclabs/hardhat-ethers');
 
+// TODO: Implement https://hardhat.org/plugins/nomiclabs-hardhat-etherscan.html
+
 const { API_URL, PRIVATE_KEY } = process.env;
 
 /**
