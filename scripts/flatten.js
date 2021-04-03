@@ -2,6 +2,10 @@ const hre = require('hardhat');
 const path = require('path');
 const fs = require('fs');
 
+const CONTRACT_FILE = 'Pengulet.sol';
+const SDPX_LICENSE = 'BSD-3-Clause';
+const OUT_DIR = path.join(__dirname, '..', 'dist');
+
 async function main() {
     let flat = '';
     const originalStdoutWrite = process.stdout.write.bind(process.stdout);
@@ -13,7 +17,7 @@ async function main() {
     };
 
     await hre.run('flatten', {
-        files: [path.join(__dirname, '..', 'contracts', 'Pengulet.sol')]
+        files: [path.join(__dirname, '..', 'contracts', CONTRACT_FILE)]
     });
 
     process.stdout.write = originalStdoutWrite;
@@ -22,10 +26,11 @@ async function main() {
         .replace(/\/\/ SPDX-License-Identifier: (.*)/gi, (_, p1) => `// ${p1}`)
         .replace(/\/\/ File .*/gi, '')
         .split('\n');
-    out.splice(0, 0, '// SPDX-License-Identifier: BSD-3-Clause');
+    out.splice(0, 0, `// SPDX-License-Identifier: ${SDPX_LICENSE}`);
     out = out.join('\n');
 
-    fs.writeFileSync(path.join(__dirname, '..', 'contracts', 'FlatPengulet.sol'), out);
+    fs.mkdirSync(OUT_DIR, { recursive: true });
+    fs.writeFileSync(path.join(OUT_DIR, `Flat${CONTRACT_FILE}`), out);
 }
 
 main()
