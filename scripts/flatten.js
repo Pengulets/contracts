@@ -20,6 +20,7 @@ async function main() {
 
     let out = flat
         .replace(/\/\/ SPDX-License-Identifier: (.*)/gi, (_, p1) => `// ${p1}`)
+        .replace(/\/\/ File .*/gi, '')
         .split('\n');
     out.splice(0, 0, '// SPDX-License-Identifier: BSD-3-Clause');
     out = out.join('\n');
