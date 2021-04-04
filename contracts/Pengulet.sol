@@ -20,11 +20,11 @@ contract Pengulet is ERC721Tradable, AccessControl {
     Counters.Counter public tokenIds;
     string public apiURI;
 
-    constructor(address _proxyRegistryAddress) ERC721Tradable("Pengulet", "PNGU", _proxyRegistryAddress) {
-        // the creator of the contract is the initial CEO
+    // TODO: Change back to normal naming
+    constructor(address _proxyRegistryAddress) ERC721Tradable("Pengulet2", "PNGU2", _proxyRegistryAddress) {
+        // the creator of the contract is the initial CEO, COO, and CFO
         ceoAddress = msg.sender;
-
-        // the creator of the contract is also the initial COO
+        cfoAddress = msg.sender;
         cooAddress = msg.sender;
 
         apiURI = "";
