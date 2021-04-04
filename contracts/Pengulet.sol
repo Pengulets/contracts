@@ -24,11 +24,6 @@ contract Pengulet is ERC721Tradable, AccessControl {
 
     // TODO: Change back to normal naming
     constructor(address _proxyRegistryAddress) ERC721Tradable("Pengulet2", "PNGU2", _proxyRegistryAddress) {
-        // the creator of the contract is the initial CEO, COO, and CFO
-        ceoAddress = msg.sender;
-        cfoAddress = msg.sender;
-        cooAddress = msg.sender;
-
         apiURI = "";
     }
 

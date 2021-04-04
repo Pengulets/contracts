@@ -16,6 +16,19 @@ abstract contract AccessControl is Context {
     event CFOTransferred(address indexed previousCFO, address indexed newCFO);
     event COOTransferred(address indexed previousCOO, address indexed newCOO);
 
+    constructor () {
+        address msgSender = _msgSender();
+
+        _ceoAddress = msgSender;
+        emit CEOTransferred(address(0), msgSender);
+
+        _cfoAddress = msgSender;
+        emit CFOTransferred(address(0), msgSender);
+
+        _cooAddress = msgSender;
+        emit COOTransferred(address(0), msgSender);
+    }
+
     /**
      * @dev Returns the address of the current CEO.
      */
