@@ -23,13 +23,15 @@ contract Pengulet is Initializable, ERC721TradableUpgradeable, AccessControlUpgr
     string public apiURI;
 
     // TODO: Change back to normal naming
-    function __Pengulet_init(address _proxyRegistryAddress) internal initializer {
-        __ERC721Tradable_init("Pengulet2", "PNGU2", _proxyRegistryAddress);
+    function __Pengulet_init(address _proxyRegistryAddress) public initializer {
+        __ERC721Tradable_init("Pengulet4", "PNGU4", _proxyRegistryAddress);
         __AccessControl_init_unchained();
         __Pengulet_init_unchained();
     }
 
     function __Pengulet_init_unchained() internal initializer {
+        paused = true;
+
         apiURI = "";
     }
 

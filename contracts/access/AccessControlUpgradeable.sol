@@ -11,7 +11,7 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable 
     address private _cooAddress;
 
     /// @dev Keeps track whether the contract is paused. When that is true, most actions are blocked
-    bool public paused = false;
+    bool public paused;
 
     event CEOTransferred(address indexed previousCEO, address indexed newCEO);
     event CFOTransferred(address indexed previousCFO, address indexed newCFO);
@@ -23,6 +23,7 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable 
     }
 
     function __AccessControl_init_unchained() internal initializer {
+        paused = false;
         address msgSender = _msgSender();
 
         _ceoAddress = msgSender;
