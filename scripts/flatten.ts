@@ -10,6 +10,7 @@ async function main() {
     let flat = '';
     const originalStdoutWrite = process.stdout.write.bind(process.stdout);
 
+    // @ts-expect-error Magic
     process.stdout.write = (chunk) => {
         if (typeof chunk === 'string') {
             flat += chunk;
@@ -22,12 +23,13 @@ async function main() {
 
     process.stdout.write = originalStdoutWrite;
 
-    let out = flat
+    const outLines = flat
         .replace(/\/\/ SPDX-License-Identifier: (.*)/gi, (_, p1) => `// ${p1}`)
         .replace(/\/\/ File .*/gi, '')
         .split('\n');
-    out.splice(0, 0, `// SPDX-License-Identifier: ${SDPX_LICENSE}`);
-    out = out.join('\n');
+    outLines.splice(0, 0, `// SPDX-License-Identifier: ${SDPX_LICENSE}`);
+
+    const out = outLines.join('\n');
 
     fs.mkdirSync(OUT_DIR, { recursive: true });
     fs.writeFileSync(path.join(OUT_DIR, `Flat${CONTRACT_FILE}`), out);
