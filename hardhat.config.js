@@ -8,7 +8,15 @@ const { API_URL, PRIVATE_KEY, ETHERSCAN_API } = process.env;
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: '0.8.3',
+  solidity: {
+    version: '0.8.3',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 50000
+      }
+    }
+  },
   defaultNetwork: 'rinkeby',
   networks: {
     hardhat: {},
