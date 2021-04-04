@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 
 contract OwnableDelegateProxy {}
 
@@ -9,15 +10,18 @@ contract ProxyRegistry {
     mapping(address => OwnableDelegateProxy) public proxies;
 }
 
-contract ERC721Tradable is ERC721 {
+contract ERC721TradableUpgradeable is Initializable, ERC721Upgradeable {
 
     address proxyRegistryAddress;
 
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        address _proxyRegistryAddress
-    ) ERC721(_name, _symbol) {
+    function __ERC721Tradable_init(string memory name_, string memory symbol_, address _proxyRegistryAddress) internal initializer {
+        __Context_init_unchained();
+        __ERC165_init_unchained();
+        __ERC721_init_unchained(name_, symbol_);
+        __ERC721Tradable_init_unchained(_proxyRegistryAddress);
+    }
+
+    function __ERC721Tradable_init_unchained(address _proxyRegistryAddress) internal initializer {
         proxyRegistryAddress = _proxyRegistryAddress;
     }
 

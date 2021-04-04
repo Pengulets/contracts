@@ -1,22 +1,28 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 
-abstract contract AccessControl is Context {
+abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable {
     // The addresses of the accounts (or contracts) that can execute actions within each roles.
     address private _ceoAddress;
     address private _cfoAddress;
     address private _cooAddress;
 
-    // @dev Keeps track whether the contract is paused. When that is true, most actions are blocked
+    /// @dev Keeps track whether the contract is paused. When that is true, most actions are blocked
     bool public paused = false;
 
     event CEOTransferred(address indexed previousCEO, address indexed newCEO);
     event CFOTransferred(address indexed previousCFO, address indexed newCFO);
     event COOTransferred(address indexed previousCOO, address indexed newCOO);
 
-    constructor () {
+    function __AccessControl_init() internal initializer {
+        __Context_init_unchained();
+        __AccessControl_init_unchained();
+    }
+
+    function __AccessControl_init_unchained() internal initializer {
         address msgSender = _msgSender();
 
         _ceoAddress = msgSender;

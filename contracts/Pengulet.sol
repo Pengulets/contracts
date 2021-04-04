@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "./ERC721Tradable.sol";
-import "./access/AccessControl.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./ERC721TradableUpgradeable.sol";
+import "./access/AccessControlUpgradeable.sol";
 
 import "./utils/StringConcat.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 /**
  * @title Pengulet
  */
-contract Pengulet is ERC721Tradable, AccessControl {
+contract Pengulet is Initializable, ERC721TradableUpgradeable, AccessControlUpgradeable {
     using StringConcat for string;
     using Strings for string;
     using SafeMath for uint256;
@@ -23,7 +23,13 @@ contract Pengulet is ERC721Tradable, AccessControl {
     string public apiURI;
 
     // TODO: Change back to normal naming
-    constructor(address _proxyRegistryAddress) ERC721Tradable("Pengulet2", "PNGU2", _proxyRegistryAddress) {
+    function __Pengulet_init(address _proxyRegistryAddress) internal initializer {
+        __ERC721Tradable_init("Pengulet2", "PNGU2", _proxyRegistryAddress);
+        __AccessControl_init_unchained();
+        __Pengulet_init_unchained();
+    }
+
+    function __Pengulet_init_unchained() internal initializer {
         apiURI = "";
     }
 
