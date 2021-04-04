@@ -26,6 +26,7 @@ async function main() {
     const outLines = flat
         .replace(/\/\/ SPDX-License-Identifier: (.*)/gi, (_, p1) => `// ${p1}`)
         .replace(/\/\/ File .*/gi, '')
+        .replace(/\n\n\n\n/gi, '')
         .split('\n');
     outLines.splice(0, 0, `// SPDX-License-Identifier: ${SDPX_LICENSE}`);
 
