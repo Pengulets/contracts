@@ -1,39 +1,66 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-contract AccessControl {
+import "@openzeppelin/contracts/utils/Context.sol";
+
+abstract contract AccessControl is Context {
     // The addresses of the accounts (or contracts) that can execute actions within each roles.
-    address public ceoAddress;
-    address public cfoAddress;
-    address public cooAddress;
+    address private _ceoAddress;
+    address private _cfoAddress;
+    address private _cooAddress;
 
     // @dev Keeps track whether the contract is paused. When that is true, most actions are blocked
     bool public paused = false;
 
+    event CEOTransferred(address indexed previousCEO, address indexed newCEO);
+    event CFOTransferred(address indexed previousCFO, address indexed newCFO);
+    event COOTransferred(address indexed previousCOO, address indexed newCOO);
+
+    /**
+     * @dev Returns the address of the current CEO.
+     */
+    function CEO() public view virtual returns (address) {
+        return _ceoAddress;
+    }
+
+    /**
+     * @dev Returns the address of the current CFO.
+     */
+    function CFO() public view virtual returns (address) {
+        return _cfoAddress;
+    }
+
+    /**
+     * @dev Returns the address of the current COO.
+     */
+    function COO() public view virtual returns (address) {
+        return _cooAddress;
+    }
+
     /// @dev Access modifier for CEO-only functionality
     modifier onlyCEO() {
-        require(msg.sender == ceoAddress, "AccessControl: caller is not the CEO");
+        require(CEO() == _msgSender(), "AccessControl: caller is not the CEO");
         _;
     }
 
     /// @dev Access modifier for CFO-only functionality
     modifier onlyCFO() {
-        require(msg.sender == cfoAddress, "AccessControl: caller is not the CFO");
+        require(CFO() == _msgSender(), "AccessControl: caller is not the CFO");
         _;
     }
 
     /// @dev Access modifier for COO-only functionality
     modifier onlyCOO() {
-        require(msg.sender == cooAddress, "AccessControl: caller is not the COO");
+        require(COO() == _msgSender(), "AccessControl: caller is not the COO");
         _;
     }
 
     /// @dev Access modifier for CEO, CFO, and COO only functionality
     modifier onlyCLevel() {
         require(
-            msg.sender == cooAddress ||
-            msg.sender == ceoAddress ||
-            msg.sender == cfoAddress,
+            COO() == _msgSender() ||
+            CEO() == _msgSender() ||
+            CFO() == _msgSender(),
             "AccessControl: caller is not the CEO, CFO, or the COO"
         );
         _;
@@ -44,7 +71,9 @@ contract AccessControl {
     function setCEO(address _newCEO) external onlyCEO {
         require(_newCEO != address(0), "AccessControl: new CEO is the zero address");
 
-        ceoAddress = _newCEO;
+        emit CEOTransferred(_ceoAddress, _newCEO);
+
+        _ceoAddress = _newCEO;
     }
 
     /// @dev Assigns a new address to act as the CFO. Only available to the current CEO.
@@ -52,7 +81,9 @@ contract AccessControl {
     function setCFO(address _newCFO) external onlyCEO {
         require(_newCFO != address(0), "AccessControl: new CFO is the zero address");
 
-        cfoAddress = _newCFO;
+        emit CFOTransferred(_cfoAddress, _newCFO);
+
+        _cfoAddress = _newCFO;
     }
 
     /// @dev Assigns a new address to act as the COO. Only available to the current CEO.
@@ -60,7 +91,9 @@ contract AccessControl {
     function setCOO(address _newCOO) external onlyCEO {
         require(_newCOO != address(0), "AccessControl: new COO is the zero address");
 
-        cooAddress = _newCOO;
+        emit COOTransferred(_cooAddress, _newCOO);
+
+        _cooAddress = _newCOO;
     }
 
     /*** Pausable functionality adapted from OpenZeppelin ***/
