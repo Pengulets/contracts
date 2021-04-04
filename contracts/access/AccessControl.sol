@@ -12,19 +12,19 @@ contract AccessControl {
 
     /// @dev Access modifier for CEO-only functionality
     modifier onlyCEO() {
-        require(msg.sender == ceoAddress);
+        require(msg.sender == ceoAddress, "AccessControl: caller is not the CEO");
         _;
     }
 
     /// @dev Access modifier for CFO-only functionality
     modifier onlyCFO() {
-        require(msg.sender == cfoAddress);
+        require(msg.sender == cfoAddress, "AccessControl: caller is not the CFO");
         _;
     }
 
     /// @dev Access modifier for COO-only functionality
     modifier onlyCOO() {
-        require(msg.sender == cooAddress);
+        require(msg.sender == cooAddress, "AccessControl: caller is not the COO");
         _;
     }
 
@@ -33,7 +33,8 @@ contract AccessControl {
         require(
             msg.sender == cooAddress ||
             msg.sender == ceoAddress ||
-            msg.sender == cfoAddress
+            msg.sender == cfoAddress,
+            "AccessControl: caller is not the CEO, CFO, or the COO"
         );
         _;
     }
@@ -41,7 +42,7 @@ contract AccessControl {
     /// @dev Assigns a new address to act as the CEO. Only available to the current CEO.
     /// @param _newCEO The address of the new CEO
     function setCEO(address _newCEO) external onlyCEO {
-        require(_newCEO != address(0));
+        require(_newCEO != address(0), "AccessControl: new CEO is the zero address");
 
         ceoAddress = _newCEO;
     }
@@ -49,7 +50,7 @@ contract AccessControl {
     /// @dev Assigns a new address to act as the CFO. Only available to the current CEO.
     /// @param _newCFO The address of the new CFO
     function setCFO(address _newCFO) external onlyCEO {
-        require(_newCFO != address(0));
+        require(_newCFO != address(0), "AccessControl: new CFO is the zero address");
 
         cfoAddress = _newCFO;
     }
@@ -57,7 +58,7 @@ contract AccessControl {
     /// @dev Assigns a new address to act as the COO. Only available to the current CEO.
     /// @param _newCOO The address of the new COO
     function setCOO(address _newCOO) external onlyCEO {
-        require(_newCOO != address(0));
+        require(_newCOO != address(0), "AccessControl: new COO is the zero address");
 
         cooAddress = _newCOO;
     }
@@ -66,13 +67,13 @@ contract AccessControl {
 
     /// @dev Modifier to allow actions only when the contract IS NOT paused
     modifier whenNotPaused() {
-        require(!paused);
+        require(!paused, "AccessControl: contract is currently paused");
         _;
     }
 
     /// @dev Modifier to allow actions only when the contract IS paused
     modifier whenPaused {
-        require(paused);
+        require(paused, "AccessControl: contract is not currently paused");
         _;
     }
 
