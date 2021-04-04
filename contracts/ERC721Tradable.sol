@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "./utils/StringConcat.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract OwnableDelegateProxy {}
@@ -14,9 +10,6 @@ contract ProxyRegistry {
 }
 
 contract ERC721Tradable is ERC721 {
-    using StringConcat for string;
-    using Strings for string;
-    using SafeMath for uint256;
 
     address proxyRegistryAddress;
 
@@ -26,14 +19,6 @@ contract ERC721Tradable is ERC721 {
         address _proxyRegistryAddress
     ) ERC721(_name, _symbol) {
         proxyRegistryAddress = _proxyRegistryAddress;
-    }
-
-    function baseTokenURI() public pure returns (string memory) {
-        return "";
-    }
-
-    function tokenURI(uint256 _tokenId) public pure override returns (string memory) {
-        return StringConcat.strConcat(baseTokenURI(), Strings.toString(_tokenId));
     }
 
     /**
