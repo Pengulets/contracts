@@ -11,12 +11,28 @@ describe('Pengulet', function () {
     });
 
     describe('initialization', () => {
-        it('SHOULD correctly set apiURI AND baseTokenURI', async function () {
+        it('should correctly initialise apiURI and read baseTokenURI()', async function () {
             const apiURI: string = await contract.apiURI();
             expect(apiURI).to.equal('');
 
             const baseTokenURI: string = await contract.baseTokenURI();
             expect(baseTokenURI).to.equal('');
+
+            expect(baseTokenURI).to.equal(apiURI);
+        });
+    });
+
+    describe('setting values', () => {
+        it('should correctly update apiURI and read apiURI, baseTokenURI()', async function () {
+            const randomInput = Math.random().toString(36).substring(7);
+
+            await contract.setApiURI(randomInput);
+
+            const apiURI: string = await contract.apiURI();
+            const baseTokenURI: string = await contract.baseTokenURI();
+
+            expect(baseTokenURI).to.equal(randomInput);
+            expect(apiURI).to.equal(randomInput);
 
             expect(baseTokenURI).to.equal(apiURI);
         });
