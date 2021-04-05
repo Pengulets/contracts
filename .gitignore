@@ -205,3 +205,5 @@ temp/
 artifacts/
 cache/
 dist/
+.openzeppelin/
+coverage.json
