@@ -10,17 +10,20 @@
     "compile": "hardhat compile",
     "deploy": "hardhat run scripts/deploy.js",
     "deploy:proxy": "hardhat run scripts/deployProxy.ts",
+    "test": "yarn compile --network ganache &&  hardhat test --network ganache",
     "flatten": "hardhat run scripts/flatten.ts"
   },
-  "dependencies": {
-    "@alch/alchemy-web3": "^1.0.2",
-    "@openzeppelin/contracts": "^4.0.0",
-    "@openzeppelin/contracts-upgradeable": "^4.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@alch/alchemy-web3": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.1",
+    "@nomiclabs/hardhat-ganache": "^2.0.0",
+    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts-upgradeable": "^4.0.0",
     "@openzeppelin/hardhat-upgrades": "^1.6.0",
+    "@openzeppelin/test-environment": "^0.1.9",
+    "@openzeppelin/test-helpers": "^0.5.10",
     "@types/chai": "^4.2.16",
     "@types/dotenv": "^8.2.0",
     "@types/mocha": "^8.2.2",
@@ -29,6 +32,7 @@
     "dotenv": "^8.2.0",
     "ethers": "^5.1.0",
     "hardhat": "^2.1.2",
+    "mocha": "^8.3.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },

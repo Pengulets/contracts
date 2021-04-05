@@ -1,5 +1,6 @@
 require('dotenv').config();
 import { HardhatUserConfig } from "hardhat/config";
+import '@nomiclabs/hardhat-ganache';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import '@nomiclabs/hardhat-etherscan';
