@@ -10,7 +10,8 @@
     "compile": "hardhat compile",
     "deploy": "hardhat run scripts/deploy.js",
     "deploy:proxy": "hardhat run scripts/deployProxy.ts",
-    "test": "yarn compile --network ganache &&  hardhat test --network ganache",
+    "test": "yarn compile --network hardhat && hardhat test --network hardhat",
+    "test:coverage": "yarn compile --network hardhat && hardhat coverage --network hardhat",
     "flatten": "hardhat run scripts/flatten.ts"
   },
   "dependencies": {},
@@ -32,7 +33,9 @@
     "dotenv": "^8.2.0",
     "ethers": "^5.1.0",
     "hardhat": "^2.1.2",
+    "hardhat-gas-reporter": "^1.0.4",
     "mocha": "^8.3.2",
+    "solidity-coverage": "^0.7.16",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
