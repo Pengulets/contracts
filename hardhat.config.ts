@@ -4,10 +4,10 @@ import '@nomiclabs/hardhat-ganache';
 import '@nomiclabs/hardhat-ethers';
 import '@openzeppelin/hardhat-upgrades';
 import '@nomiclabs/hardhat-etherscan';
-// import 'hardhat-gas-reporter';
+import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 
-const { API_URL, PRIVATE_KEY, ETHERSCAN_API } = process.env;
+const { API_URL, PRIVATE_KEY, ETHERSCAN_API, COINMARKETCAP_API } = process.env;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -32,6 +32,13 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: ETHERSCAN_API
+  },
+  gasReporter: {
+    excludeContracts: ['mocks/'],
+    showTimeSpent: true,
+    currency: 'EUR',
+    gasPrice: 94,
+    coinmarketcap: COINMARKETCAP_API
   }
 };
 
