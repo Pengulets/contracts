@@ -2,7 +2,7 @@ import { Contract } from '@ethersproject/contracts';
 import { expect } from 'chai';
 import { ethers, upgrades } from 'hardhat';
 
-describe('Pengulet', function () {
+describe('PenguletUpgradeable', function () {
     let contract: Contract;
 
     beforeEach(async function () {
