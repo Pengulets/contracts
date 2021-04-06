@@ -6,8 +6,8 @@ describe('Pengulet', function () {
     let contract: Contract;
 
     beforeEach(async function () {
-        const Pengulet = await ethers.getContractFactory('Pengulet');
-        contract = await upgrades.deployProxy(Pengulet, ['0xf57b2c51ded3a29e6891aba85459d600256cf317'], { initializer: '__Pengulet_init' });
+        const PenguletUpgradeable = await ethers.getContractFactory('PenguletUpgradeable');
+        contract = await upgrades.deployProxy(PenguletUpgradeable, ['0xf57b2c51ded3a29e6891aba85459d600256cf317'], { initializer: '__Pengulet_init' });
     });
 
     describe('initialization', () => {

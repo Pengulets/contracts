@@ -5,21 +5,23 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./ERC721TradableUpgradeable.sol";
 import "./access/AccessControlUpgradeable.sol";
 
-import "./utils/StringConcat.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
 /**
  * @title Pengulet
  */
-contract PenguletUpgradeable is Initializable, ERC721TradableUpgradeable, AccessControlUpgradeable {
-    using StringConcat for string;
-    using Strings for string;
-    using SafeMath for uint256;
-    using Counters for Counters.Counter;
+contract PenguletUpgradeable is
+    Initializable,
+    ERC721TradableUpgradeable,
+    AccessControlUpgradeable
+{
+    using StringsUpgradeable for uint256;
+    using SafeMathUpgradeable for uint256;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
 
-    Counters.Counter public tokenIds;
+    CountersUpgradeable.Counter public tokenIds;
     string public apiURI;
 
     // TODO: Change back to normal naming
@@ -52,8 +54,23 @@ contract PenguletUpgradeable is Initializable, ERC721TradableUpgradeable, Access
 
     // TODO: contractURI
 
-    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-        return StringConcat.strConcat(baseTokenURI(), Strings.toString(_tokenId));
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
+        require(
+            _exists(tokenId),
+            "ERC721Metadata: URI query for nonexistent token"
+        );
+
+        string memory baseURI = baseTokenURI();
+        return
+            bytes(baseURI).length > 0
+                ? string(abi.encodePacked(baseURI, tokenId.toString()))
+                : "";
     }
 
     function baseTokenURI() public view returns (string memory) {
