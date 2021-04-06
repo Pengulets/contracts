@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "./ERC721Tradable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./ERC721TradableUpgradeable.sol";
+import "./access/AccessControlUpgradeable.sol";
 
 import "./utils/StringConcat.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -11,8 +13,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 /**
  * @title Pengulet
  */
-// TODO: add some sort of access control
-contract Pengulet is ERC721Tradable {
+contract PenguletUpgradeable is Initializable, ERC721TradableUpgradeable, AccessControlUpgradeable {
     using StringConcat for string;
     using Strings for string;
     using SafeMath for uint256;
@@ -21,13 +22,20 @@ contract Pengulet is ERC721Tradable {
     Counters.Counter public tokenIds;
     string public apiURI;
 
-    constructor(
-        address _proxyRegistryAddress
-    ) ERC721Tradable("Pengulet4", "PNGU4", _proxyRegistryAddress) {
+    // TODO: Change back to normal naming
+    function __Pengulet_init(address _proxyRegistryAddress) public initializer {
+        __ERC721Tradable_init("Pengulet4", "PNGU4", _proxyRegistryAddress);
+        __AccessControl_init_unchained();
+        __Pengulet_init_unchained();
+    }
+
+    function __Pengulet_init_unchained() internal initializer {
+        paused = true;
+
         apiURI = "";
     }
 
-    function setApiURI(string memory _uri) external {
+    function setApiURI(string memory _uri) external onlyCEO {
         apiURI = _uri;
     }
 
@@ -35,7 +43,7 @@ contract Pengulet is ERC721Tradable {
      * @dev Mints a token to an address with a tokenURI.
      * @param _to address of the future owner of the token
      */
-    function mintTo(address _to) public {
+    function mintTo(address _to) public onlyCOO {
         tokenIds.increment();
 
         uint256 newItemId = tokenIds.current();

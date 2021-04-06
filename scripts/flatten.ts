@@ -2,7 +2,7 @@ const hre = require('hardhat');
 const path = require('path');
 const fs = require('fs');
 
-const CONTRACT_FILE = 'Pengulet.sol';
+const CONTRACT_FILE = 'PenguletUpgradeable.sol';
 const SDPX_LICENSE = 'BSD-3-Clause';
 const OUT_DIR = path.join(__dirname, '..', 'dist');
 
