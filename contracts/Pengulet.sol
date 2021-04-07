@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.3;
 
-import "./ERC721Tradable.sol";
+import "./base/ERC721Tradable.sol";
 
 import "./utils/StringConcat.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
