@@ -12,12 +12,12 @@ const { API_URL, PRIVATE_KEY, ETHERSCAN_API, COINMARKETCAP_API } = process.env;
 const config: HardhatUserConfig = {
   solidity: {
     version: '0.8.3',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 50000
-      }
-    }
+    // settings: {
+    //   optimizer: {
+    //     enabled: true,
+    //     runs: 50000
+    //   }
+    // }
   },
   defaultNetwork: 'rinkeby',
   networks: {
@@ -37,7 +37,7 @@ const config: HardhatUserConfig = {
     excludeContracts: ['mocks/'],
     showTimeSpent: true,
     currency: 'EUR',
-    gasPrice: 94,
+    gasPrice: 125,
     coinmarketcap: COINMARKETCAP_API
   }
 };
