@@ -2,7 +2,7 @@ import fs from 'fs';
 import hre from 'hardhat';
 import path from 'path';
 
-export const CONTRACT_FILE = 'Flink.sol';
+export const CONTRACT_FILE = 'Pengulets.sol';
 export const SDPX_LICENSE = 'Apache-2.0';
 export const OUT_DIR = path.join(__dirname, '..', 'dist');
 

@@ -1,14 +1,17 @@
 import { ethers, upgrades } from 'hardhat';
-import type { Flink } from '../typechain';
+import type { Pengulets } from '../typechain';
 
 async function main() {
-	const FlinkContract = await ethers.getContractFactory('Flink');
+	const PenguletsContract = await ethers.getContractFactory('Pengu');
 
-	const flink = (await upgrades.deployProxy(FlinkContract, [], { initializer: '__Flink_init', kind: 'uups' })) as Flink;
+	const pengulets = (await upgrades.deployProxy(PenguletsContract, ['Pengulets', 'PNGU'], {
+		initializer: '__Pengulets_init',
+		kind: 'uups'
+	})) as Pengulets;
 
-	await flink.deployed();
+	await pengulets.deployed();
 
-	console.log('Contract deployed to address:', flink.address);
+	console.log('Contract deployed to address:', pengulets.address);
 }
 
 main().catch((error) => {
