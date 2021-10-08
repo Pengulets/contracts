@@ -5,7 +5,7 @@ import type { Pengulets } from '../typechain';
 
 chai.use(solidity);
 
-describe('Flink', () => {
+describe('Pengulets', () => {
 	let contract: Pengulets;
 
 	beforeEach(async () => {
