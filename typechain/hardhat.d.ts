@@ -61,6 +61,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
+      name: "PenguletsExposed",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PenguletsExposed__factory>;
+    getContractFactory(
       name: "Pengulets",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Pengulets__factory>;
@@ -125,6 +129,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165Upgradeable>;
+    getContractAt(
+      name: "PenguletsExposed",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PenguletsExposed>;
     getContractAt(
       name: "Pengulets",
       address: string,

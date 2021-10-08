@@ -13,6 +13,7 @@ export type { IERC721ReceiverUpgradeable } from "./IERC721ReceiverUpgradeable";
 export type { IERC721Upgradeable } from "./IERC721Upgradeable";
 export type { ERC165Upgradeable } from "./ERC165Upgradeable";
 export type { IERC165Upgradeable } from "./IERC165Upgradeable";
+export type { PenguletsExposed } from "./PenguletsExposed";
 export type { Pengulets } from "./Pengulets";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
@@ -27,4 +28,5 @@ export { IERC721ReceiverUpgradeable__factory } from "./factories/IERC721Receiver
 export { IERC721Upgradeable__factory } from "./factories/IERC721Upgradeable__factory";
 export { ERC165Upgradeable__factory } from "./factories/ERC165Upgradeable__factory";
 export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__factory";
+export { PenguletsExposed__factory } from "./factories/PenguletsExposed__factory";
 export { Pengulets__factory } from "./factories/Pengulets__factory";

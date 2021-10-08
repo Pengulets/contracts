@@ -1,12 +1,13 @@
 import chai, { expect } from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers, upgrades } from 'hardhat';
-import type { Pengulets } from '../typechain';
+import type { Pengulets, PenguletsExposed } from '../typechain';
 
 chai.use(solidity);
 
 describe('Pengulets', () => {
 	let contract: Pengulets;
+	let contractExposed: PenguletsExposed;
 
 	beforeEach(async () => {
 		const PenguletsContract = await ethers.getContractFactory('Pengulets');
@@ -14,6 +15,12 @@ describe('Pengulets', () => {
 			initializer: '__Pengulets_init',
 			kind: 'uups'
 		})) as Pengulets;
+
+		const PenguletsExposedContract = await ethers.getContractFactory('PenguletsExposed');
+		contractExposed = (await upgrades.deployProxy(PenguletsExposedContract, ['Pengulets-Exposed', 'PNGU-E'], {
+			initializer: '__PenguletsExposed_init',
+			kind: 'uups'
+		})) as PenguletsExposed;
 	});
 
 	describe('initialization', () => {
@@ -49,6 +56,21 @@ describe('Pengulets', () => {
 			const [, accountAlternative] = await ethers.getSigners();
 
 			await expect(contract.connect(accountAlternative).mintTo(accountAlternative.address)).to.be.revertedWith(
+				'Ownable: caller is not the owner'
+			);
+		});
+
+		it('should authorize upgrade', async () => {
+			const [, { address: temporaryImplementationAddress }] = await ethers.getSigners();
+
+			await contractExposed.authorizeUpgrade(temporaryImplementationAddress);
+			// expect('authorizeUpgrade').to.be.calledOnContract(contractExposed);
+		});
+
+		it('should fail to authorize upgrade', async () => {
+			const [, accountAlternative, { address: temporaryImplementationAddress }] = await ethers.getSigners();
+
+			await expect(contractExposed.connect(accountAlternative).authorizeUpgrade(temporaryImplementationAddress)).to.be.revertedWith(
 				'Ownable: caller is not the owner'
 			);
 		});
