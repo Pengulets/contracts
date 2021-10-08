@@ -26,7 +26,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
-    "c_0x1122aa6b(bytes32)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintTo(address)": FunctionFragment;
@@ -60,10 +59,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "c_0x1122aa6b",
-    values: [BytesLike]
-  ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -135,10 +130,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "c_0x1122aa6b",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -308,11 +299,6 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<[string]>;
 
-    c_0x1122aa6b(
-      c__0x1122aa6b: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[void]>;
-
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -437,11 +423,6 @@ export class Pengulets extends BaseContract {
 
   baseURI(overrides?: CallOverrides): Promise<string>;
 
-  c_0x1122aa6b(
-    c__0x1122aa6b: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<void>;
-
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -557,11 +538,6 @@ export class Pengulets extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     baseURI(overrides?: CallOverrides): Promise<string>;
-
-    c_0x1122aa6b(
-      c__0x1122aa6b: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -776,11 +752,6 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
-    c_0x1122aa6b(
-      c__0x1122aa6b: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -906,11 +877,6 @@ export class Pengulets extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    c_0x1122aa6b(
-      c__0x1122aa6b: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     getApproved(
       tokenId: BigNumberish,

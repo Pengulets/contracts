@@ -45,7 +45,7 @@ describe('Pengulets', () => {
 	});
 
 	describe('permissions', () => {
-		it('should fail to min', async () => {
+		it('should fail to mint', async () => {
 			const [, accountAlternative] = await ethers.getSigners();
 
 			await expect(contract.connect(accountAlternative).mintTo(accountAlternative.address)).to.be.revertedWith(
@@ -77,6 +77,18 @@ describe('Pengulets', () => {
 
 			expect(baseURI).to.equal(randomInput);
 			expect(tokenURI).to.equal(`${randomInput}${1}`);
+		});
+
+		it('should correctly update baseURI, and fail to read tokenURI', async () => {
+			const randomInput = Math.random().toString(36).substring(7);
+
+			await contract.setBaseURI(randomInput);
+
+			const baseURI: string = await contract.baseURI();
+
+			expect(baseURI).to.equal(randomInput);
+
+			await expect(contract.tokenURI(1)).to.be.revertedWith('ERC721Metadata: URI query for nonexistent token');
 		});
 	});
 });
