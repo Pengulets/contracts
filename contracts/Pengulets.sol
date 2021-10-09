@@ -19,6 +19,9 @@ contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradea
 
 	string public baseURI;
 
+	mapping(uint256 => uint256) public lastTransferTimestamp;
+	mapping(address => uint256) private pastCumulativeHODL;
+
 	function __Pengulets_init(
 		string memory _name,
 		string memory _symbol,
@@ -39,9 +42,20 @@ contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradea
 		_safeMint(to, tokenId);
 	}
 
-    function mintNext(address to) public virtual onlyOwner {
-        uint supply = totalSupply();
+	function mintNext(address to) public virtual onlyOwner {
+		uint256 supply = totalSupply();
 		mint(to, supply + 1);
+	}
+
+	function cumulativeHODL(address user) public view returns (uint256) {
+		uint256 _cumulativeHODL = pastCumulativeHODL[user];
+		uint256 bal = balanceOf(user);
+		for (uint256 i = 0; i < bal; i++) {
+			uint256 tokenId = tokenOfOwnerByIndex(user, i);
+			uint256 timeHodld = block.timestamp - lastTransferTimestamp[tokenId];
+			_cumulativeHODL += timeHodld;
+		}
+		return _cumulativeHODL;
 	}
 
 	function setBaseURI(string memory newURI) public onlyOwner {
@@ -55,6 +69,7 @@ contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradea
 		return bytes(baseURI_).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : '';
 	}
 
+	/* istanbul ignore next */
 	function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable, ERC721EnumerableUpgradeable) returns (bool) {
 		return super.supportsInterface(interfaceId);
 	}
@@ -70,6 +85,12 @@ contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradea
 		uint256 tokenId
 	) internal virtual override(ERC721Upgradeable, ERC721EnumerableUpgradeable) {
 		super._beforeTokenTransfer(from, to, tokenId);
+
+		uint256 timeHodld = block.timestamp - lastTransferTimestamp[tokenId];
+		if (from != address(0)) {
+			pastCumulativeHODL[from] += timeHodld;
+		}
+		lastTransferTimestamp[tokenId] = block.timestamp;
 	}
 
 	function _baseURI() internal view virtual override returns (string memory) {

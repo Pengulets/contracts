@@ -27,8 +27,10 @@ interface PenguletsInterface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
+    "cumulativeHODL(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "lastTransferTimestamp(uint256)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "mintNext(address)": FunctionFragment;
     "name()": FunctionFragment;
@@ -62,12 +64,20 @@ interface PenguletsInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "cumulativeHODL",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lastTransferTimestamp",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
@@ -137,11 +147,19 @@ interface PenguletsInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "cumulativeHODL",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lastTransferTimestamp",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
@@ -308,6 +326,11 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<[string]>;
 
+    cumulativeHODL(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -318,6 +341,11 @@ export class Pengulets extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    lastTransferTimestamp(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     mint(
       to: string,
@@ -437,6 +465,8 @@ export class Pengulets extends BaseContract {
 
   baseURI(overrides?: CallOverrides): Promise<string>;
 
+  cumulativeHODL(user: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -447,6 +477,11 @@ export class Pengulets extends BaseContract {
     operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  lastTransferTimestamp(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   mint(
     to: string,
@@ -560,6 +595,8 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<string>;
 
+    cumulativeHODL(user: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -570,6 +607,11 @@ export class Pengulets extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    lastTransferTimestamp(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     mint(
       to: string,
@@ -780,6 +822,8 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
+    cumulativeHODL(user: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -788,6 +832,11 @@ export class Pengulets extends BaseContract {
     isApprovedForAll(
       owner: string,
       operator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lastTransferTimestamp(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -913,6 +962,11 @@ export class Pengulets extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    cumulativeHODL(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -921,6 +975,11 @@ export class Pengulets extends BaseContract {
     isApprovedForAll(
       owner: string,
       operator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lastTransferTimestamp(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
