@@ -10,32 +10,38 @@ import '@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721Enumer
 
 import '@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol';
-import '@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol';
 
 contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, OwnableUpgradeable, UUPSUpgradeable {
 	using StringsUpgradeable for uint256;
 	using SafeMathUpgradeable for uint256;
-	using CountersUpgradeable for CountersUpgradeable.Counter;
+
+	uint256 public MAX_PNGU;
 
 	string public baseURI;
 
-	CountersUpgradeable.Counter public tokenIds;
-
-	function __Pengulets_init(string memory _name, string memory _symbol) public initializer {
+	function __Pengulets_init(
+		string memory _name,
+		string memory _symbol,
+		uint256 maxSupply
+	) public initializer {
 		__ERC721_init(_name, _symbol);
 		__ERC721Enumerable_init();
 		__Ownable_init();
 		__UUPSUpgradeable_init();
-		__Pengulets_init_unchained();
+		__Pengulets_init_unchained(maxSupply);
 	}
 
-	function __Pengulets_init_unchained() internal initializer {}
+	function __Pengulets_init_unchained(uint256 maxSupply) internal initializer {
+		MAX_PNGU = maxSupply;
+	}
 
-	function mintTo(address _to) public onlyOwner {
-		tokenIds.increment();
+	function mint(address to, uint256 tokenId) public virtual onlyOwner {
+		_safeMint(to, tokenId);
+	}
 
-		uint256 newItemId = tokenIds.current();
-		_mint(_to, newItemId);
+    function mintNext(address to) public virtual onlyOwner {
+        uint supply = totalSupply();
+		mint(to, supply + 1);
 	}
 
 	function setBaseURI(string memory newURI) public onlyOwner {
@@ -51,6 +57,11 @@ contract Pengulets is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradea
 
 	function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Upgradeable, ERC721EnumerableUpgradeable) returns (bool) {
 		return super.supportsInterface(interfaceId);
+	}
+
+	function _safeMint(address to, uint256 tokenId) internal virtual override {
+		require(tokenId < MAX_PNGU, 'Max supply');
+		super._safeMint(to, tokenId);
 	}
 
 	function _beforeTokenTransfer(

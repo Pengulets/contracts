@@ -4,7 +4,7 @@ import type { Pengulets } from '../typechain';
 async function main() {
 	const PenguletsContract = await ethers.getContractFactory('Pengu');
 
-	const pengulets = (await upgrades.deployProxy(PenguletsContract, ['Pengulets', 'PNGU'], {
+	const pengulets = (await upgrades.deployProxy(PenguletsContract, ['Pengulets', 'PNGU', 8192], {
 		initializer: '__Pengulets_init',
 		kind: 'uups'
 	})) as Pengulets;

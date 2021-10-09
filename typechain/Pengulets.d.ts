@@ -22,13 +22,15 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface PenguletsInterface extends ethers.utils.Interface {
   functions: {
-    "__Pengulets_init(string,string)": FunctionFragment;
+    "MAX_PNGU()": FunctionFragment;
+    "__Pengulets_init(string,string,uint256)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintTo(address)": FunctionFragment;
+    "mint(address,uint256)": FunctionFragment;
+    "mintNext(address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -39,7 +41,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
-    "tokenIds()": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
@@ -49,9 +50,10 @@ interface PenguletsInterface extends ethers.utils.Interface {
     "upgradeToAndCall(address,bytes)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "MAX_PNGU", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "__Pengulets_init",
-    values: [string, string]
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "approve",
@@ -67,7 +69,11 @@ interface PenguletsInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
-  encodeFunctionData(functionFragment: "mintTo", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "mintNext", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -96,7 +102,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
     functionFragment: "tokenByIndex",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "tokenIds", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenOfOwnerByIndex",
     values: [string, BigNumberish]
@@ -123,6 +128,7 @@ interface PenguletsInterface extends ethers.utils.Interface {
     values: [string, BytesLike]
   ): string;
 
+  decodeFunctionResult(functionFragment: "MAX_PNGU", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "__Pengulets_init",
     data: BytesLike
@@ -138,7 +144,8 @@ interface PenguletsInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "mintTo", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintNext", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -164,7 +171,6 @@ interface PenguletsInterface extends ethers.utils.Interface {
     functionFragment: "tokenByIndex",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "tokenIds", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenOfOwnerByIndex",
     data: BytesLike
@@ -283,9 +289,12 @@ export class Pengulets extends BaseContract {
   interface: PenguletsInterface;
 
   functions: {
+    MAX_PNGU(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     __Pengulets_init(
       _name: string,
       _symbol: string,
+      maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -310,8 +319,14 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    mintTo(
-      _to: string,
+    mint(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintNext(
+      to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -366,10 +381,6 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    tokenIds(
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { _value: BigNumber }>;
-
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -407,9 +418,12 @@ export class Pengulets extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  MAX_PNGU(overrides?: CallOverrides): Promise<BigNumber>;
+
   __Pengulets_init(
     _name: string,
     _symbol: string,
+    maxSupply: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -434,8 +448,14 @@ export class Pengulets extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  mintTo(
-    _to: string,
+  mint(
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintNext(
+    to: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -487,8 +507,6 @@ export class Pengulets extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  tokenIds(overrides?: CallOverrides): Promise<BigNumber>;
-
   tokenOfOwnerByIndex(
     owner: string,
     index: BigNumberish,
@@ -523,9 +541,12 @@ export class Pengulets extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    MAX_PNGU(overrides?: CallOverrides): Promise<BigNumber>;
+
     __Pengulets_init(
       _name: string,
       _symbol: string,
+      maxSupply: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -550,7 +571,13 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mintTo(_to: string, overrides?: CallOverrides): Promise<void>;
+    mint(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintNext(to: string, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -594,8 +621,6 @@ export class Pengulets extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    tokenIds(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokenOfOwnerByIndex(
       owner: string,
@@ -736,9 +761,12 @@ export class Pengulets extends BaseContract {
   };
 
   estimateGas: {
+    MAX_PNGU(overrides?: CallOverrides): Promise<BigNumber>;
+
     __Pengulets_init(
       _name: string,
       _symbol: string,
+      maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -763,8 +791,14 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mintTo(
-      _to: string,
+    mint(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintNext(
+      to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -819,8 +853,6 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    tokenIds(overrides?: CallOverrides): Promise<BigNumber>;
-
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -859,9 +891,12 @@ export class Pengulets extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_PNGU(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     __Pengulets_init(
       _name: string,
       _symbol: string,
+      maxSupply: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -889,8 +924,14 @@ export class Pengulets extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mintTo(
-      _to: string,
+    mint(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintNext(
+      to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -944,8 +985,6 @@ export class Pengulets extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    tokenIds(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenOfOwnerByIndex(
       owner: string,

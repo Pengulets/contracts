@@ -1,4 +1,5 @@
 import '@nomiclabs/hardhat-ethers';
+import '@nomiclabs/hardhat-ganache';
 // import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-solhint';
 import '@nomiclabs/hardhat-waffle';
@@ -21,13 +22,15 @@ const config: HardhatUserConfig = {
 	},
 	defaultNetwork: 'hardhat',
 	networks: {
-		hardhat: {}
+		hardhat: {
+			blockGasLimit: 1245000000
+		}
 	},
 	gasReporter: {
 		excludeContracts: ['mocks/'],
 		showTimeSpent: true,
 		currency: 'EUR',
-		gasPrice: 90,
+		gasPrice: 68,
 		coinmarketcap: coinMarketCapApi
 	}
 };

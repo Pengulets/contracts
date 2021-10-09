@@ -11,13 +11,13 @@ describe('Pengulets', () => {
 
 	beforeEach(async () => {
 		const PenguletsContract = await ethers.getContractFactory('Pengulets');
-		contract = (await upgrades.deployProxy(PenguletsContract, ['Pengulets', 'PNGU'], {
+		contract = (await upgrades.deployProxy(PenguletsContract, ['Pengulets', 'PNGU', 8192], {
 			initializer: '__Pengulets_init',
 			kind: 'uups'
 		})) as Pengulets;
 
 		const PenguletsExposedContract = await ethers.getContractFactory('PenguletsExposed');
-		contractExposed = (await upgrades.deployProxy(PenguletsExposedContract, ['Pengulets-Exposed', 'PNGU-E'], {
+		contractExposed = (await upgrades.deployProxy(PenguletsExposedContract, ['Pengulets-Exposed', 'PNGU-E', 8192], {
 			initializer: '__PenguletsExposed_init',
 			kind: 'uups'
 		})) as PenguletsExposed;
@@ -55,7 +55,7 @@ describe('Pengulets', () => {
 		it('should fail to mint', async () => {
 			const [, accountAlternative] = await ethers.getSigners();
 
-			await expect(contract.connect(accountAlternative).mintTo(accountAlternative.address)).to.be.revertedWith(
+			await expect(contract.connect(accountAlternative).mintNext(accountAlternative.address)).to.be.revertedWith(
 				'Ownable: caller is not the owner'
 			);
 		});
@@ -91,7 +91,7 @@ describe('Pengulets', () => {
 			const [{ address }] = await ethers.getSigners();
 			const randomInput = Math.random().toString(36).substring(7);
 
-			await contract.mintTo(address);
+			await contract.mintNext(address);
 			await contract.setBaseURI(randomInput);
 
 			const baseURI: string = await contract.baseURI();
@@ -112,5 +112,14 @@ describe('Pengulets', () => {
 
 			await expect(contract.tokenURI(1)).to.be.revertedWith('ERC721Metadata: URI query for nonexistent token');
 		});
+	});
+
+	describe('minting', () => {
+		it('should mint maximum and fail going over', async () => {
+			const [, { address: alternativeAddress }] = await ethers.getSigners();
+			await contractExposed.mintAll();
+
+			await expect(contractExposed.mintNext(alternativeAddress)).to.be.revertedWith('Max supply');
+		}).timeout(100000);
 	});
 });
